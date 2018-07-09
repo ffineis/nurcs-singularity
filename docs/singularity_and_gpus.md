@@ -21,7 +21,7 @@ Specific Tensorflow (and therefore Keras) releases are only compatible with spec
 
 Within the container, the easiest way to install CUDA (rather than mount) is to just Bootstrap an [NVIDIA CUDA Docker image](https://hub.docker.com/r/nvidia/cuda/) for the version matching a CUDA installation available on Quest via an Environment Module (e.g. 8.0 or 9.2). The CUDA and corresponding library/shared object files have to be added to the $PATH and $LD_LIBRARY_PATH. 
 
-Alternatively (and probably more simply), we could just hard-code the CUDA paths on Quest (i.e. `/software/cuda/...`) and build those. This hurts portability, because I can't use this on my machine unless I have the same path locally, or if I bind my own CUDA install to the CUDA paths named in the recipe file at singularity runtime using the `-B` flag.
+Alternatively, we could change the `singularity.conf` so thatthe CUDA paths on Quest (i.e. `/software/cuda/...`) are always bound to a container during `run`, `exec`, or `shell`, and hardcode the `/software/cuda/...` paths. This hurts portability, because I can't use this on my machine unless I have the same path locally, or if I bind my own CUDA install to the CUDA paths named in the recipe file at singularity runtime using the `-B` flag.
 
 Another (probably worse) option is to require that the user has run `load module cuda/[version]` and then hardcode the path to the CUDA library/shared object files within a recipe file, build that container, and then pray that the user chooses the correct container on Quest. This would hurt portability more than simply relying on a particular CUDA version.
 
