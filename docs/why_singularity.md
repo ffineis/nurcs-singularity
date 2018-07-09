@@ -1,3 +1,5 @@
+Use: internal, external
+
 # Why Singularity?
 
 Have you ever wished that you had the ability to install new software on Quest? Quest is a high performance computing (HPC) cluster - it's one massive computing resource shared by everyone in the Northwestern computing community. This is known as [multitenancy](https://en.wikipedia.org/wiki/Multitenancy). The typical user does not have `sudo` access to install software at the root level like system administrator, because then everyone would be able to alter everyone else's computing environment.
