@@ -24,6 +24,7 @@ From: ubuntu:16.04
 	python-dev \
 	unzip \
 	wget \
+    vim \
 	zip
 
     # move to /tmp to store temp files during container build
@@ -67,7 +68,8 @@ From: ubuntu:16.04
 	mlpy \
 	nltk \
 	statsmodels \
-	opencv-python
+	opencv-python \
+    biopython
 
     # get tensorflow from source
     cd /opt
@@ -92,10 +94,10 @@ From: ubuntu:16.04
 
 %files
 
-    singularity_logo.txt /tmp
+    singularity_logo.txt /opt
 
 %runscript
 
-    cat /tmp/singularity_logo.txt
+    cat /opt/singularity_logo.txt
 
 %environment
