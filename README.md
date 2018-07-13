@@ -14,4 +14,4 @@
 
 There can be multiple recipe files per container directory, for example, if there are both CPU and GPU versions of a single container.
 
-Follow the (Singularity automated build documentation)[https://github.com/singularityhub/singularityhub.github.io/wiki/Build-A-Container] for recipe file naming conventions for automated builds.
+Follow the [Singularity automated build documentation](https://github.com/singularityhub/singularityhub.github.io/wiki/Build-A-Container) for recipe file naming conventions for automated builds.
