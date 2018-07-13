@@ -69,7 +69,7 @@ From: ubuntu:16.04
 	nltk \
 	statsmodels \
 	opencv-python \
-    biopython
+    	biopython
 
     # get tensorflow from source
     cd /opt
