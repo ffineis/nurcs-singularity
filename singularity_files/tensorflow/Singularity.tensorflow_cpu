@@ -24,7 +24,7 @@ From: ubuntu:16.04
 	python-dev \
 	unzip \
 	wget \
-    vim \
+    	vim \
 	zip
 
     # move to /tmp to store temp files during container build
