@@ -9,6 +9,7 @@ From: ubuntu:16.04
 
     apt-get -y update && apt-get -y upgrade
     apt-get -y --allow-unauthenticated install \
+    apt-utils \
 	autoconf \
 	automake \
 	build-essential \
