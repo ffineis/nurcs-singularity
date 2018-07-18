@@ -16,6 +16,7 @@ From: ubuntu:16.04
 
     apt-get -y update && apt-get -y upgrade
     apt-get -y --allow-unauthenticated install \
+    apt-utils \
 	autoconf \
 	automake \
 	build-essential \
@@ -34,7 +35,7 @@ From: ubuntu:16.04
 	libgfortran3 \
 	libopencv-dev \
 	libxslt1-dev \
-	libxml2-dev \'
+	libxml2-dev \
 	libxt-dev \
 	unzip \
 	wget \
@@ -75,7 +76,7 @@ From: ubuntu:16.04
 
 #    # ------------------------------------------------ #
 #    #                   TF for python2                 #
-#    # ------------------------------------------------ ##
+#    # ------------------------------------------------ #
 
 #    # python2 TF/data science package dependencies
 #    pip install numpy # requisite for mlpy install
@@ -96,7 +97,7 @@ From: ubuntu:16.04
 
 #    # ------------------------------------------------ #
 #    #                   TF for python3                 #
-#    # ------------------------------------------------ ##
+#    # ------------------------------------------------ #
 
 #    pip3 install numpy # requisite for mlpy install
 #    pip3 install Cython \
@@ -113,6 +114,12 @@ From: ubuntu:16.04
 #	opencv-python \
 #	biopython \
 #	seaborn
+
+#    # ------------------------------------------------ #
+#    #                 Useful r packages                #
+#    # ------------------------------------------------ #
+
+#	Rscript --vanilla install_packages.r
 
 
 %test
