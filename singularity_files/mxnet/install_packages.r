@@ -11,7 +11,7 @@ packages <- c('MASS'
               , 'ggplot2'
               , 'dplyr'
               , 'plyr'
-              , 'purr'
+              , 'purrr'
               , 'tidyr'
               , 'stringr'
               , 'car'
@@ -21,8 +21,9 @@ packages <- c('MASS'
               , 'caret'
               , 'xtable')
 
+curPackages <- names(installed.packages()[, 1])
 for(p in packages){
-    if(!(p %in% names(installed.packages()[, 1]))){
+    if(!(p %in% curPackages)){
         install.packages(p, repos='http://cran.us.r-project.org')
     }
 }

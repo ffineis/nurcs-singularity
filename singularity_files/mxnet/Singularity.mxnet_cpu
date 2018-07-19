@@ -10,13 +10,12 @@ From: ubuntu:16.04
 
     # ------------------------------------------------ #
     #                   Kernel overhead                #
-    #												   #
-    # 				install python, python3, r 		   #
     # ------------------------------------------------ #
 
     apt-get -y update && apt-get -y upgrade
     apt-get -y --allow-unauthenticated install \
-    apt-utils \
+	apt-utils \
+	apt-transport-https \
 	autoconf \
 	automake \
 	build-essential \
@@ -50,82 +49,95 @@ From: ubuntu:16.04
 	python3-dev \
 	python3-pip \
 	python3-wheel \
-	r-base \
-	r-base-dev
+	software-properties-common \
+	python-software-properties
 
-	# ------------------------------------------------ #
-    #                   	MXNet    	               #
+    # ------------------------------------------------ #
+    #                  Build MXNet    	               #
     # ------------------------------------------------ #
 
     # move to /tmp for mxnet install; keep 
     cd /opt
 	
-	git clone --recursive https://github.com/apache/incubator-mxnet
-	cd ./incubator-mxnet
-	make -j $(nproc) USE_OPENCV=1 USE_BLAS=openblas
+    git clone --recursive https://github.com/apache/incubator-mxnet
+    cd ./incubator-mxnet
+    make -j $(nproc) USE_OPENCV=1 USE_BLAS=openblas
 
-	# ------------------------------------------------ #
-    #              MXNet: python + r bindings          #
+    # ------------------------------------------------ #
+    #            MXNet: python bindings                #
     # ------------------------------------------------ #
 
-	cd ./python
-	pip install -e .
-	pip install graphviz
+    cd ./python
+    pip install -e .
+    pip install graphviz
 
-	make rpkg
+    # ------------------------------------------------ #
+    #                 R and its bindings               #
+    # ------------------------------------------------ #
 
-#    # ------------------------------------------------ #
-#    #                   TF for python2                 #
-#    # ------------------------------------------------ #
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+    add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/'
+    apt-get update
+    apt-get -y --allow-unauthenticated install \
+	r-base \
+	r-base-dev
 
-#    # python2 TF/data science package dependencies
-#    pip install numpy # requisite for mlpy install
-#    pip install Cython \
-#	pandas \
-#	feather-format \
-#	mock \
-#	scipy \
-#	sklearn \
-#	matplotlib \
-#	mlpy \
-#	nose \
-#	nltk \
-#	statsmodels \
-#	opencv-python \
-#	biopython \
-#	seaborn#
+    cd ..
+    R --version
+    make rpkg
 
-#    # ------------------------------------------------ #
-#    #                   TF for python3                 #
-#    # ------------------------------------------------ #
+    # ------------------------------------------------ #
+    #          Install DS/ML python packages           #
+    # ------------------------------------------------ #
 
-#    pip3 install numpy # requisite for mlpy install
-#    pip3 install Cython \
-#	pandas \
-#	feather-format \
-#	mock \
-#	scipy \
-#	sklearn \
-#	matplotlib \
-#	ipython \
-#	nose \
-#	nltk \
-#	statsmodels \
-#	opencv-python \
-#	biopython \
-#	seaborn
+    pip install numpy # requisite for mlpy install
+    pip install Cython \
+	pandas \
+	feather-format \
+	mock \
+	scipy \
+	sklearn \
+	matplotlib \
+	mlpy \
+	nose \
+	nltk \
+	statsmodels \
+	opencv-python \
+	biopython \
+	seaborn
 
-#    # ------------------------------------------------ #
-#    #                 Useful r packages                #
-#    # ------------------------------------------------ #
+    pip3 install numpy
+    pip3 install Cython \
+	pandas \
+	feather-format \
+	mock \
+	scipy \
+	sklearn \
+	matplotlib \
+	ipython \
+	nose \
+	nltk \
+	statsmodels \
+	opencv-python \
+	biopython \
+	seaborn \
+	graphviz
 
-#	Rscript --vanilla install_packages.r
+    # ------------------------------------------------ #
+    #             Install R packages for DS            #
+    # ------------------------------------------------ #
+
+    Rscript --vanilla /opt/install_packages.r
 
 
 %test
 
+    python -c 'import mxnet as mx; print(mx.nd.ones((2, 3)))'
+    Rscript -e 'library(mxnet); print(mx.nd.ones(c(2,3), ctx = mx.cpu()))'
+
 %files
 
+    install_packages.r /opt
     singularity_logo.txt /opt
 
 %runscript
