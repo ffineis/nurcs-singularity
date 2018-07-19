@@ -1,0 +1,13 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+
+# editor files
+*/.idea
+
+# container file
+*.simg
+*.img
