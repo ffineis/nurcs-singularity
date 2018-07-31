@@ -4,11 +4,13 @@ Use: internal,external
 
 We have available to the Northwestern computational research community a set of pre-built Singularity containers designed to work with the Quest High Performance Computing Cluster hosted by Northwestern IT.
 
-Note that to use any container on quest, you must load the Singularity environment module:
+Note that Singularity is currently installed on Quest system-wide, so there is no need to load the Singularity Environment Module. You should be able to run this:
 
 ```bash
-$ module load singularity
+$ singularity --version
 ```
+
+to see the version of Singularity installed on Quest.
 
 If you are curious as to the make up of any particular container, you can view their [Singularity recipe files](https://github.com/ffineis/nurcs-singularity/tree/master/singularity_files). Note our convention of appending either `_cpu` or `_gpu` to the container name to indicate whether a container has been configured for use with a GPU partition on Quest, in the case of software that has both CPU- and GPU-enabled flavors.
 

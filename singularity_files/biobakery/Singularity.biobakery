@@ -1,0 +1,56 @@
+Bootstrap: docker
+From: biobakery/biobakery
+
+%setup
+
+%post 
+
+	apt-get update
+	apt-get install -y wget git locales
+
+    #MC issue with locale (LC_ALL, LANGUAGE), to get it right:
+    locale-gen "en_US.UTF-8"
+    dpkg-reconfigure locales
+    export LANGUAGE="en_US.UTF-8"
+    echo 'LANGUAGE="en_US.UTF-8"' >> /etc/default/locale
+    echo 'LC_ALL="en_US.UTF-8"' >> /etc/default/locale
+
+	# install USEARCH. See https://github.com/CHPC-UofU/Singularity-bioBakery/blob/master/Singularity.
+	USEARCH_URL="http://drive5.com/cgi-bin/upload3.py?license=2017031414422118742"
+    wget -O /usr/local/bin/usearch $USEARCH_URL
+    chmod 111 /usr/local/bin/usearch
+
+%test
+	
+	# graphlan tests
+	#graphlan_annotate.py /opt/hmptree.xml /opt/hmptree.annot.xml --annot /opt/annot.txt
+
+	# humann2 tests
+	#humann2_test
+	
+	# kneaddata tests
+	#kneaddata -i /home/linuxbrew/.linuxbrew/Cellar/kneaddata/0.6.1/libexec/lib/python2.7/site-packages/kneaddata/tests/data/demo.fastq --output /opt/kneaddata_output
+
+	# halla tests
+	#halla -X X_16_100.txt -Y Y_16_100.txt --output /opt/halla_output
+
+	# ppanini tests
+	# note: ppanini has "unittest.loader.ModuleImportFailure" tests that are designed to fail, I think for compatitibility purposes?
+	#ppanini_test
+
+	# shortbred tests (not working)
+	#shortbred_identify.py --goi /home/linuxbrew/.linuxbrew/Cellar/biobakery_demos/1.6/libexec/lib/python2.7/site-packages/biobakery_demos/data/shortbred/input/input_prots.faa --ref /home/linuxbrew/.linuxbrew/Cellar/biobakery_demos/1.6/libexec/lib/python2.7/site-packages/biobakery_demos/data/shortbred/input/ref_prots.faa --markers mytestmarkers.faa --tmp /opt/shortbred_output
+
+%files
+
+    singularity_logo.txt /opt
+	test_files/annot.txt /opt
+	test_files/hmptree.xml /opt
+	test_files/X_16_100.txt /opt
+	test_files/Y_16_100.txt /opt
+
+%runscript
+
+    cat /opt/singularity_logo.txt
+
+%environment

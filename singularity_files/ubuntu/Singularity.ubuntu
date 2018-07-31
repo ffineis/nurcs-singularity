@@ -36,22 +36,22 @@ From: ubuntu:16.04
 	python3-pip \
 	python3-wheel \
 	unzip \
+	vim \
 	wget \
 	zip \
 	zlib1g-dev
 
 
-    # ------------------------------------------------ #
-    #                   Mount bind points              #
-    # note: not necessary if `enable overlay = yes`,   #
-    # appears to be the case on Quest				   #
-    # ------------------------------------------------ #
-
+	# Mount /software dir bind point for Quest
     mkdir /software
+
+
+	# Use bash as default shell
+	SHELL=/bin/bash
 
 %test
 
-	cat /usr/lib/os-release
+    cat /usr/lib/os-release
 
 %files
 
