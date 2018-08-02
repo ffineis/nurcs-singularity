@@ -18,7 +18,7 @@ Once you have authored a recipe file, you can build a new container from it:
 ```
 
 
-## Recipe file anatomy
+## Anatomy of a recipe file
 
 ### Header
 This goes at the top of the file. Use this to define the base operating system you would like your container to be comprised of - that is, it defines a starting point for your container. Most of the time, this would probably be some sort of Linux specification, but you can also use this section to start building from on top of a Docker image. The header is usually just two lines; one line is `Bootstrap: [host]` and the second line is `From: [image source on host]`
