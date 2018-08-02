@@ -6,7 +6,7 @@ On Quest, Singularity is installed system-wide, so you will always have access t
 
 ## Accessing containers
 
-The `singularity` command is always used with a particular container: you will likely have already taken one of the following three steps:
+The `singularity` command is always used with a particular container, so you'll need access to the the Singularity container file you want to run/execute/shell into/etc... There are multiple ways to do this.
 
 1. You have built or downloaded a container on your local machine. You should upload it to Quest (recommended you use Cyberduck or sftp) if you have not already.
 
@@ -83,9 +83,79 @@ You can exit the Singularity shell session from the command prompt by typing `ex
 ### Batch jobs and `singularity exec`
 If you want to submit a batch job on Moab via `msub` that leverages a Singularity container, you're either going to use `singularity exec` or `singularity run` (or both).
 
-Suppose we have an .R script that uses command line flags (with the R package [`argparse`](https://github.com/trevorld/argparse/blob/master/exec/example.R)) that can train a machine learning model with MXNet and can also send new data through a model and save the predictions.
+Suppose we have an .R script called `mxnet_model_builder.R` that uses command line flags (with the R package [`argparse`](https://github.com/trevorld/argparse/blob/master/exec/example.R)) that can train a machine learning model with MXNet and can also send new data through a model and save the predictions:
+
+```bash
+$ Rscript mxnet_model_builder.R --train-data training.csv --model truck_model.RDS    # trains and saves a model
+$ Rscript mxnet_model_builder.R --test-data test.csv --model ./truck_model.RDS       # executes model on test.csv dataset
+```
+
+You can submit a Moab job (in the file `mxnet_modeler_submission.sh`) that trains and tests a model using the MXNet installation in `mxnet_cpu.simg`. Use `singularity shell` followed by a command that you would like to be exectuted from within the container:
+
+```bash
+$ cat mxnet_modeler_submission.sh
+
+#!/bin/bash
+#MSUB -A <allocation ID>
+#MSUB -l walltime=05:00:00
+#MSUB -j oe
+#MSUB -q normal
+#MSUB -N mxnet_modeler
+#MSUB -l nodes=2:ppn=16
 
 
+# Run the job...
+singularity shell mxnet_cpu.simg Rscript mxnet_model_builder.R --train-data ../data/training.csv --model ../models/truck_model.RDS
+singularity shell mxnet_cpu.simg Rscript mxnet_model_builder.R --test-data test.csv --model ./truck_model.RDS
 
 
+$ msub mxnet_modeler_submission.sh
+```
 
+
+### `singularity run`
+Some containers have entrypoints (i.e. interfaces) and are configured to be run like applications. For example, [this container](https://www.singularity-hub.org/containers/2279) has R and the R command line interface tools (e.g. Rscript) installed on it. The `%runscript` section ot the container's recipe file has specified
+
+```bash
+%runscript
+    exec R "$@"
+```
+
+Suppose we pulled this container and named it `base_r.simg`. Then whenever you we `singularity run base_r.simg`, this is the same thing as running the command `R` from the command line. So we could run this:
+
+```bash
+$ singularity run base_r.simg -e 'library(dplyr); filter(mtcars, hp >= 100)'
+```
+
+This is the same as running `R -e 'library(dplyr); filter(mtcars, hp >= 100)'` on a machine that has R (and the dplyr package) installed. Your container may also be configured to run as multiple types of softwares through [app functionality](https://singularity.lbl.gov/docs-recipes#apps) which may also affect the exact way in which you call `singularity run` to execute your programs.
+
+## Containers + GPUs
+Singularity containers can be deployed on GPUs, and can use them to run popular GPU-supported software.
+
+Suppose you have requested an interactive job on a GPU partition on Quest:
+```bash
+
+```
+
+
+## Best practices
+
+### Bound directories
+A Singularity container is much like having a separate machine that's running its own OS; as such, there is a wall between a container and your host OS by default. That is, unless you've [bound directories](http://singularity.lbl.gov/docs-mount) on the host OS to directories in the container during the container build. Binding means that the container "shares" a directory with your host OS, so that you can read and write to/from the host.
+
+By default, the following directories are all (recursively) bound to a container for you:
+- `$HOME`
+- `/tmp`
+- `/proc`
+- `/sys`
+- `/dev`
+
+**Best practices for using Singularity on Quest include keeping all files you need while running `singularity run/exec/shell` (for example, data files, scripts, etc.) in a location rooted in the `$HOME` directory.** If your data is located in, for example, `/opt`, Singularity will not be aware of it.
+
+Should you need files on Quest that are located outside of the bound-by-default directories (e.g. `/software`), you can easily bind it upon calling `singularity`. For example, if I need access to the `/software` directory, just bind it (and multiple other directories) with the flag `-B`:
+
+```bash
+$ singularity shell -B /software mxnet_cpu.simg
+```
+
+Alternatively, you can use the `SINGULARITY_BINDPATH` environment variable to skip having to specify directories to bind every time you use `singularity`. More information on bind points can be found [here](http://singularity.lbl.gov/docs-mount).
