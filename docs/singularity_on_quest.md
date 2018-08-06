@@ -25,10 +25,11 @@ put my_container.simg .
 For example, to pull the CPU-supported MXNet container into your home directory on Quest, run the following:
 
 ```bash
+$ export SINGULARITY_PULLFOLDER=$TMPDIR
 $ singularity pull shub://ffineis/nurcs-singularity:mxnet_cpu
 ```
 
-When you pull a container from Singularity Hub or Docker, it will probably come with a long, gross file name. Rename it automatically during the pull with the `-name` flag:
+When you pull a container from Singularity Hub or Docker, it will probably come with a long, gross file name. Rename it automatically during the pull with the `--name` flag:
 
 ```bash
 $ singularity pull --name mxnet_cpu.simg shub://ffineis/nurcs-singularity:mxnet_cpu
