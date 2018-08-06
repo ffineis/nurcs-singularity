@@ -59,7 +59,7 @@ $ singularity pull --name mxnet_cpu.simg shub://ffineis/nurcs-singularity:mxnet_
 Let's assume that `mxnet_cpu.simg` is in your home directory. "Enter" the container with `singularity shell`, where you have MXNet installed as a Python and R library. **Once you enter the container with `shell`, it's like you're running on a new machine that has the MXNet libraries installed:**
 
 ```bash
-$ singularity shell mxnet_cpu.simg
+$ singularity shell $TMPDIR/mxnet_cpu.simg
 Singularity mxnet_cpu.simg:~/> R
 > library(mxnet)
 > install.packages('mlbench')
@@ -107,8 +107,8 @@ export SINGULARITY_PULLFOLDER=$TMPDIR
 singularity pull --name mxnet_cpu.simg shub://ffineis/nurcs-singularity:mxnet_cpu
 
 # Run the job...
-singularity shell mxnet_cpu.simg Rscript mxnet_model_builder.R --train-data ../data/training.csv --model ../models/truck_model.RDS
-singularity shell mxnet_cpu.simg Rscript mxnet_model_builder.R --test-data test.csv --model ./truck_model.RDS
+singularity shell $TMPDIR/mxnet_cpu.simg Rscript mxnet_model_builder.R --train-data ../data/training.csv --model ../models/truck_model.RDS
+singularity shell $TMPDIR/mxnet_cpu.simg Rscript mxnet_model_builder.R --test-data test.csv --model ./truck_model.RDS
 
 
 $ msub mxnet_modeler_submission.sh
@@ -174,7 +174,7 @@ Try to keep all files you need while running `singularity run/exec/shell` (for e
 Should you need files on Quest that are located outside of the bound-by-default directories (e.g. `/projects/b1042`), you can easily bind it upon calling `singularity`. For example, should you need access to the `/projects` directory to access data for an analysis you would like to run, simply bind it (and multiple other directories) with the flag `-B`:
 
 ```bash
-$ singularity shell -B /projects mxnet_cpu.simg
+$ singularity shell -B /projects $TMPDIR/mxnet_cpu.simg
 ```
 
 Alternatively, you can use the `SINGULARITY_BINDPATH` environment variable to skip having to specify directories to bind every time you use `singularity`. More information on bind points can be found [here](http://singularity.lbl.gov/docs-mount).
