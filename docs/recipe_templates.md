@@ -17,23 +17,32 @@ $ sudo singularity build [container name] [writable container name]
 ```
 
 
-## Templates for containers
+# Templates for containers
 
-### Linux (`/templates/linux.recipe`)
+## Linux (`/templates/linux.recipe`)
+
+#### Choosing a Linux distribution
 First, choose the Linux distribution. The default is Linux Ubuntu 16.04 (Xenial release), and the rest of the template is designed for an Ubuntu container. It is important to note that the `apt-get` package installer tool is the package management command for Linux Ubuntu distributions. Other distributions - for example Alpine Linux or Fedora - may use other package management commands (e.g. `yum` or `apk`).
+
+<img src="img/linux_distro_choice.png" width="425px" height="150px">
 
 The distribution image will be bootstrapped from Docker Hub (note line 1) - bootstrapping from Docker is the easiest way to get a container up and running.
 
+#### The `%post` section
 The `%post` section is dedicated to installing useful command line utilities such as `git` and `wget`, and important Linux packages that are often required by software you will try to install later on. The first step towards installing any packages or command line utilities is to run
 
 ```bash
 $ apt-get -y update && apt-get -y upgrade
 ```
 
-Should you need more libraries or access to more command line utilities, just append them to the `apt-get install` command. Recall that you can join lines with a forward-slash (`\`). Breaking up the list of Linux packages you're trying to install with `\`'s will make your recipe more readable and easier to scan when trying to install packages that are all similarly-named.
+Should you need more libraries or access to more command line utilities, just append them to the `apt-get install` command. Recall that you can join lines with a forward-slash (`\`). Breaking up the list of Linux packages you're trying to install with `\`'s will make your recipe more readable and easier to scan when trying to install packages that are all similarly-named...
+
+<img src="img/apt_get_install.png" width="400px" height="330px">
+
+The following chunks in the `%post` section are for mounting directories you might want access to later on in Quest and for installing whatever other software you may want (for example, Miniconda 3).
 
 
-### Data Science
+## Data Science
 
 Uncomment lines to install any of the following:
 - R (most recent version)
@@ -53,3 +62,9 @@ Uncomment lines to install any of the following:
 ### PHP + Apache
 
 ### Biobakery tools
+
+
+# FAQ
+1. Why can't I access my data within a Singularity container?
+2. `sudo: command not found` Error
+    - You will never need the `sudo` command within a Singularity recipe file. Because you can only ever run `singularity build` by prefacing it with `sudo`, the sudo privileges get passed to `root`, the user actually executing the commands in the `%post` section during container build.
