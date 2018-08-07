@@ -22,7 +22,7 @@ put my_container.simg .
 ### Pulling an image from a Singularity Hub collection
 [Pull](http://singularity.lbl.gov/docs-pull) a Singularity container maintained on [NU IT's Singularity Hub collection](https://www.singularity-hub.org/collections/1271), a container from any other Singularity Hub collection, or any Docker container available on Docker Hub. It is recommended that you pull containers on a per-job basis to the `$TMPDIR` directory created upon requesting resources from Moab. **Consult the best practices section below.**
 
-For example, to pull the CPU-supported MXNet container into your home directory on Quest, run the following:
+For example, to pull the CPU-supported MXNet container into the disposable directory created when you launch a Moab job, run the following:
 
 ```bash
 $ export SINGULARITY_PULLFOLDER=$TMPDIR

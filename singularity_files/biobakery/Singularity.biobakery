@@ -32,60 +32,42 @@ From: biobakery/biobakery
 	echo 'export PATH='$PATH:/home/linuxbrew/.linuxbrew/bin:$(pwd):$(pwd)/utils >> $SINGULARITY_ENVIRONMENT
 	chmod 755 /home/linuxbrew
 
-	# root cannot use brew, so create dummy user brewuser to run brew installs.
-	#useradd -m brewuser
-	#chown -R brewuser /usr/local/
-	#chown -R brewuser /home/linuxbrew/
-
-	# update brew and add biobakery formulae.
-	#cd /home/brewuser
-	#su -c '/home/linuxbrew/.linuxbrew/bin/brew update || true ; /home/linuxbrew/.linuxbrew/bin/brew update  ' brewuser
-	#su -c '/home/linuxbrew/.linuxbrew/bin/brew install freetype --build-from-source' brewuser
-	#su -c '/home/linuxbrew/.linuxbrew/bin/brew tap biobakery/biobakery' brewuser
-
-	# install the missing biobakery tools not installed in the biobakery/biobakery Docker image.
-	#su -c 'pip install numpy biom-format' brewuser
-	#su -c 'echo $(which gcc-5)' brewuser
-	#su -c '/home/linuxbrew/.linuxbrew/bin/brew install metaphlan2' brewuser # breaks on biom install
-
 %test
+
+	export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/home/linuxbrew/.linuxbrew/bin:/opt/biobakery-metaphlan2-*:/opt/biobakery-metaphlan2-*/utils
+
+	mkdir /opt/test_output
 	
 	# graphlan tests
-	#graphlan_annotate.py /opt/hmptree.xml /opt/hmptree.annot.xml --annot /opt/annot.txt
+	graphlan_annotate.py /opt/hmptree.xml /opt/test_output/hmptree.annot.xml --annot /opt/annot.txt
 
 	# humann2 tests
-	#humann2_test
+	humann2_test
 	
 	# kneaddata tests
-	#kneaddata -i /home/linuxbrew/.linuxbrew/Cellar/kneaddata/0.6.1/libexec/lib/python2.7/site-packages/kneaddata/tests/data/demo.fastq --output ~/kneaddata_output
-
-	#if [ -d "~/kneaddata_output" ]; then
-	#	rm -rf ~/kneaddata_output
-	#fi
+	kneaddata -i /home/linuxbrew/.linuxbrew/Cellar/kneaddata/0.6.1/libexec/lib/python2.7/site-packages/kneaddata/tests/data/demo.fastq --output /opt/test_output/kneaddata_output
 
 	# halla tests
-	#halla -X X_16_100.txt -Y Y_16_100.txt --output /opt/halla_output
+	halla -X /opt/X_16_100.txt -Y /opt/Y_16_100.txt --output /opt/test_output/halla_output
 
 	# ppanini tests
 	# note: ppanini has "unittest.loader.ModuleImportFailure" tests that are designed to fail, I think for compatitibility purposes?
-	#ppanini_test
+	ppanini_test
 
 	# shortbred tests
-	#shortbred_identify.py --goi /home/linuxbrew/.linuxbrew/Cellar/biobakery_demos/1.6/libexec/lib/python2.7/site-packages/biobakery_demos/data/shortbred/input/input_prots.faa --ref /home/linuxbrew/.linuxbrew/Cellar/biobakery_demos/1.6/libexec/lib/python2.7/site-packages/biobakery_demos/data/shortbred/input/ref_prots.faa --markers mytestmarkers.faa --tmp ~/shortbred_output
+	shortbred_identify.py --goi /home/linuxbrew/.linuxbrew/Cellar/biobakery_demos/1.6/libexec/lib/python2.7/site-packages/biobakery_demos/data/shortbred/input/input_prots.faa --ref /home/linuxbrew/.linuxbrew/Cellar/biobakery_demos/1.6/libexec/lib/python2.7/site-packages/biobakery_demos/data/shortbred/input/ref_prots.faa --markers mytestmarkers.faa --tmp /opt/test_output/shortbred_output
 
-	#if [ -d "~/shortbred_output" ]; then
-	#	rm mytestmarkers.faa
-	#	rm -rf ~/shortbred_output
-	#fi
+	# (shortbred clean up)
+	rm mytestmarkers.faa
 
 	# metaphlan tests
-	#mkdir ~/metaphlan2_output
-	#cd ~/metaphlan2_output
-	#curl -O https://bitbucket.org/biobakery/biobakery/raw/tip/demos/biobakery_demos/data/metaphlan2/input/SRS014476-Supragingival_plaque.fasta.gz
-	#metaphlan2.py SRS014476-Supragingival_plaque.fasta.gz  --input_type fasta > SRS014476-Supragingival_plaque_profile.txt
+	mkdir /opt/test_output/metaphlan2_output
+	cd /opt/test_output/metaphlan2_output
+	curl -O https://bitbucket.org/biobakery/biobakery/raw/tip/demos/biobakery_demos/data/metaphlan2/input/SRS014476-Supragingival_plaque.fasta.gz
+	metaphlan2.py SRS014476-Supragingival_plaque.fasta.gz  --input_type fasta > SRS014476-Supragingival_plaque_profile.txt
 
-	#cd ~
-	#rm -rf ~/metaphlan2_output
+	# (clean up from tests)
+	rm -rf /opt/test_output
 
 %files
 
