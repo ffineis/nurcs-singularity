@@ -16,7 +16,7 @@
 |-- submit_job.sh (example MOAB submission file utilizing singularity cmds)
 ```
 
-There can be multiple recipe files per container directory, for example, if there are both CPU and GPU versions of a single container. Files titled `Singularity.<container tag>` 
+There can be multiple recipe files per container directory, for example, if there are both CPU and GPU versions of a single container. Files titled `Singularity.<container tag>` can be built on Singularity Hub and integrated with our Singularity Hub collection.
 
 Check the build status of each container in this repository on [Singularity Hub](https://singularity-hub.org/collections/1271)
 
