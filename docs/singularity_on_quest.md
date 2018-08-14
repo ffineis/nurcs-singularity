@@ -107,8 +107,8 @@ export SINGULARITY_PULLFOLDER=$TMPDIR
 singularity pull --name mxnet_cpu.simg shub://ffineis/nurcs-singularity:mxnet_cpu
 
 # Run the job...
-singularity shell $TMPDIR/mxnet_cpu.simg Rscript mxnet_model_builder.R --train-data ../data/training.csv --model ../models/truck_model.RDS
-singularity shell $TMPDIR/mxnet_cpu.simg Rscript mxnet_model_builder.R --test-data test.csv --model ./truck_model.RDS
+singularity exec $TMPDIR/mxnet_cpu.simg Rscript mxnet_model_builder.R --train-data ../data/training.csv --model ../models/truck_model.RDS
+singularity exec $TMPDIR/mxnet_cpu.simg Rscript mxnet_model_builder.R --test-data test.csv --model ./truck_model.RDS
 
 
 $ msub mxnet_modeler_submission.sh

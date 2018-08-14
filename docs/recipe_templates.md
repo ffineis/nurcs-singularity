@@ -66,5 +66,6 @@ Uncomment lines to install any of the following:
 
 # FAQ
 1. Why can't I access my data within a Singularity container?
+    - Make sure that the directory where your data lives is bound to the container. Either put the data somewhere rooted in your `$HOME` directory, or bind the directory where your data lives when calling `singularity run/shell/exec` with the `-B` flag. Read the [Singularity documentation on binding/mounting directories](http://singularity.lbl.gov/docs-mount) to make them visible to your containers, or read the `Singularity on Quest` documentation for further assistance.
 2. `sudo: command not found` Error
     - You will never need the `sudo` command within a Singularity recipe file. Because you can only ever run `singularity build` by prefacing it with `sudo`, the sudo privileges get passed to `root`, the user actually executing the commands in the `%post` section during container build.
