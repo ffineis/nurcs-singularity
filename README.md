@@ -6,12 +6,17 @@
 |-- docs (documentation)
 |-- singularity_files
 | |-- [container files]
-|   |-- Singularity.[container tag]
+|   |-- Singularity.<container tag> (can be built/integrated into Sinuglarity Hub collection)
 |   |-- [files for pulling resources during container build]
 |   |-- [files for running tests]
+|
+|-- templates
+| |-- [template recipe files]
+|
+|-- submit_job.sh (example MOAB submission file utilizing singularity cmds)
 ```
 
-There can be multiple recipe files per container directory, for example, if there are both CPU and GPU versions of a single container.
+There can be multiple recipe files per container directory, for example, if there are both CPU and GPU versions of a single container. Files titled `Singularity.<container tag>` 
 
 Check the build status of each container in this repository on [Singularity Hub](https://singularity-hub.org/collections/1271)
 
