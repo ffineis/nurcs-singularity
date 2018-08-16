@@ -89,6 +89,13 @@ From: ubuntu:16.04 # (ubuntu Xenial)
 
 %test
 	
+	# ------------------------------------------------ #
+    #              Tests: must pass on build 		   #
+    # You may not be able to run these as a non-sudo   #
+    # user when deployed on Quest.					   #
+    # ------------------------------------------------ #
+
+    # If os-release file exists (Ubuntu distros), display it.
 	if [ -f /usr/lib/os-release ]; then
     	cat /usr/lib/os-release
     fi

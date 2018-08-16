@@ -39,19 +39,12 @@ Should you need more libraries or access to more command line utilities, just ap
 
 <img src="img/apt_get_install.png" width="400px" height="330px">
 
-The following chunks in the `%post` section are for mounting directories you might want access to later on in Quest and for installing whatever other software you may want (for example, Miniconda 3).
+The the last commands in the `%post` section are for mounting directories you might want access to later on in Quest, and then finally, for installing whatever other software you may want (for example, Miniconda 3). Since you will build your container with `sudo singularity build...`, you have administrator-like access while running any commands in the `%post` section during build.
 
+Note that you can ensure that variables are exported (e.g. `$PATH`) upon launching a container with the `$SINGULARITY_ENVIRONMENT` variable. For example, in `linux.recipe`, we could export `$PATH` to include Anaconda command line utilities.
 
-## Data Science
+<img src="img/path_export.png" width="900px" height="200px">
 
-Uncomment lines to install any of the following:
-- R (most recent version)
-- Useful R packages
-- python2 and python3
-- Conda (python package manager)
-- pip (another python package manager)
-- Useful python packages
-- Linuxbrew (Homebrew for Linux)
 
 ### GPU-enabled applications
 
