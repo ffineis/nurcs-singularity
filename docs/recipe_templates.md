@@ -46,7 +46,37 @@ Note that you can ensure that variables are exported (e.g. `$PATH`) upon launchi
 <img src="img/path_export.png" width="900px" height="200px">
 
 
-### GPU-enabled applications
+### GPU-enabled containers
+There are three major steps in building a GPU-enabled container:
+1. Install the correct CUDA release compatible with the NVIDIA drivers on the Quest GPU partitions available to you. Only specific versions of NVIDIA drivers are compatible with specific CUDA versions. It is recommended that you [pull a Docker image from NVIDIA](https://hub.docker.com/r/nvidia/cuda/) with the CUDA version you want installed on it.
+2. Add the CUDA executable + library files to your `$PATH`. Most often, these 
+3. Install your GPU-enabled software, e.g. Tensorflow.
+
+A great starting point for building GPU-enabled containers is a [recipe file from the University of Utah](https://github.com/CHPC-UofU/Singularity-ubuntu-gpu/blob/master/Singularity) that pulls an NVIDIA Docker image with CUDA installed and sets up the `$PATH` variable for you.
+
+If you are curious about the NVIDIA drivers on your GPU partition, run the command `nvidia-smi`. Note that not all CUDA releases are compatible with all NVIDIA driver versions - you must match them here.
+
+
+| CUDA version | NVIDIA driver version |
+|--------------|-----------------------|
+|CUDA 9.2:     |        396.xx         |
+|CUDA 9.1:     | 387.xx                |
+|CUDA 9.0:     | 384.xx                |
+|CUDA 8.0      | 375.xx (GA2)          |
+|CUDA 8.0:     | 367.4x                |
+|CUDA 7.5:     | 352.xx                |
+|CUDA 7.0:     | 346.xx                |
+|CUDA 6.5:     | 340.xx                |
+|CUDA 6.0:     | 331.xx                |
+|CUDA 5.5:     | 319.xx                |
+|CUDA 5.0:     | 304.xx                |
+|CUDA 4.2:     | 295.41                |
+|CUDA 4.1:     | 285.05.33             |
+|CUDA 4.0:     | 270.41.19             |
+|CUDA 3.2:     | 260.19.26             |
+|CUDA 3.1:     | 256.40                |
+|CUDA 3.0:     | 195.36.15             |
+
 
 ### Postgres
 
