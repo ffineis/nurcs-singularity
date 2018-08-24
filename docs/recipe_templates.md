@@ -17,9 +17,10 @@ $ sudo singularity build [container name] [writable container name]
 ```
 
 
-# Templates for containers
 
-## Linux (`/templates/linux.recipe`)
+## Bootstrapping a Linux container
+
+(See `/templates/linux.recipe`)
 
 #### Choosing a Linux distribution
 First, choose the Linux distribution. The default is Linux Ubuntu 16.04 (Xenial release), and the rest of the template is designed for an Ubuntu container. It is important to note that the `apt-get` package installer tool is the package management command for Linux Ubuntu distributions. Other distributions - for example Alpine Linux or Fedora - may use other package management commands (e.g. `yum` or `apk`).
@@ -46,7 +47,7 @@ Note that you can ensure that variables are exported (e.g. `$PATH`) upon launchi
 <img src="img/path_export.png" width="900px" height="200px">
 
 
-### GPU-enabled containers
+## Bootstrapping a GPU-enabled container
 There are three major steps in building a GPU-enabled container:
 1. Install the correct CUDA release compatible with the NVIDIA drivers on the Quest GPU partitions available to you. Only specific versions of NVIDIA drivers are compatible with specific CUDA versions. It is recommended that you [pull a Docker image from NVIDIA](https://hub.docker.com/r/nvidia/cuda/) with the CUDA version you want installed on it.
 2. Add the CUDA executable + library files to your `$PATH`. Most often, these 
@@ -78,13 +79,42 @@ If you are curious about the NVIDIA drivers on your GPU partition, run the comma
 |CUDA 3.0:     | 195.36.15             |
 
 
-### Postgres
 
-### MySQL
+## Bootstrapping a bioBakery container
+[bioBakery](https://bitbucket.org/biobakery/biobakery/wiki/Home) is a suite of software tools used by the genomics and microbial research community. There are currently 20+ constituent bioBakery tools. Typically, users install all of these tools with *Homebrew*, an open-source package management system for the Mac OS. There is a Linux version of Homebrew called *Linuxbrew*, so, in theory users should be able to `brew install` bioBakery tools from Linux-OS Singularity containers using Linuxbrew.
 
-### PHP + Apache
+Despite the appearance of simplicity, installing bioBakery tools via Linuxbrew often fails for a multitude of reasons. Further complicating bioBakery tool installation using Linuxbrew is the fact that `*brew` is not supposed to be run as root; execept in Singularity, users *must* build containers as root. So, the work around becomes creating an auxiliary user (call her "brewuser") and running `brew install` commands as brewuser with `su -c`. [Here](https://github.com/CHPC-UofU/Singularity-bioBakery/blob/master/Singularity) is an example of someone once successfully hacking Linuxbrew with Singularity to install the bioBakery suite. It is now deprecated (for example, various brew taps have been renamed/reorganized).
 
-### Biobakery tools
+Instead, we recommend starting with a bioBakery Docker container, for example:
+
+```bash
+Bootstrap: docker
+From: biobakery/biobakery
+```
+
+and then manually installing additional bioBakery tools (as opposed to Linux`brew install`-ing these tools) as needed. Here is a link to [all available bioBakery Docker containers](https://hub.docker.com/u/biobakery/).
+
+You will find one composite container ([`biobakery/biobakery`](https://hub.docker.com/r/biobakery/biobakery/)) with 16 tools installed:
+- humann2
+- shortbred
+- graphlan
+- kneaddata
+- ppanini
+- maaslin
+- strainphlan
+- micropita
+- sparsedossa
+- picrust
+- breadcrumbs
+- halla
+- hclust2
+- panphlan
+- lefse
+- workflows
+
+Alternatively, the remaining Docker containers each have an individual bioBakery tool installed. Should you need a multitude of tools, our [bioBakery Container](https://github.com/ffineis/nurcs-singularity/blob/master/singularity_files/biobakery/Singularity.biobakery) (available on Singularity Hub) offers an example of bootstrapping the `biobakery/biobakery` container from Docker and then manually installing the `metaphlan` tool:
+
+<img src="img/metaphlan_install.png" width="700px" height="150px">
 
 
 # FAQ
@@ -92,3 +122,5 @@ If you are curious about the NVIDIA drivers on your GPU partition, run the comma
     - Make sure that the directory where your data lives is bound to the container. Either put the data somewhere rooted in your `$HOME` directory, or bind the directory where your data lives when calling `singularity run/shell/exec` with the `-B` flag. Read the [Singularity documentation on binding/mounting directories](http://singularity.lbl.gov/docs-mount) to make them visible to your containers, or read the `Singularity on Quest` documentation for further assistance.
 2. `sudo: command not found` Error
     - You will never need the `sudo` command within a Singularity recipe file. Because you can only ever run `singularity build` by prefacing it with `sudo`, the sudo privileges get passed to `root`, the user actually executing the commands in the `%post` section during container build.
+3. Are environment modules available from within a Singularity container?
+    - Unfortunately, no. You will not be able to run `module load <module name>` from within a container; you will need to install that software you had intended to load into the container itself.
