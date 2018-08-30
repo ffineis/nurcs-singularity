@@ -6,7 +6,7 @@ Possibly the most impactful consequence of using Singularity on Quest is that it
 
 In pulling Docker container, you use the URI template
 
-> docker://<registry>/<namespace>/<repo_name>:<repo_tag>`
+`docker://<registry>/<namespace>/<repo_name>:<repo_tag>`
 
 Most often the registry is just `docker.io`, a publicly available registry.
 
