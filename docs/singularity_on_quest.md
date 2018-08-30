@@ -146,7 +146,7 @@ $ singularity pull --name tensorflow_gpu.simg shub://ffineis/nurcs-singularity:t
 When calling `shell`, `run`, or `exec`, just pass the `--nv` flag to enable NVIDIA support. Singularity will locate the host's NVIDIA drivers and share them with the container; the container should have a compatible release of CUDA installed and the correct `$PATH` variables set up.
 
 ```bash
-$ singularity exec --nv python mnist_image_classifier.py
+$ singularity exec --nv $TMPDIR/tensorflow_gpu.simg python mnist_image_classifier.py
 ```
 
 
