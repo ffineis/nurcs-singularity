@@ -6,7 +6,7 @@ Possibly the most impactful consequence of using Singularity on Quest is that it
 
 In pulling Docker container, you use the URI template
 
-> `docker://<registry>/<namespace>/<repo_name>:<repo_tag>`.
+> docker://<registry>/<namespace>/<repo_name>:<repo_tag>`
 
 Most often the registry is just `docker.io`, a publicly available registry.
 
@@ -35,16 +35,17 @@ In this case, resort to `docker2singularity`(https://github.com/singularityware/
 
 1. Install Docker on your local machine.
 2. Log into the registry (from the command line) with the `docker login` utility:
-> `docker login <registry name>.io`
+```docker login <registry name>.io```
 
 3. Use `docker2singularity` to pull a Docker container, change it into a Singularity container, and save it to your machine:
-> ```
+```
 docker run \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -v [path/where/you/want/to/save/container]:/output \
 --privileged -t --rm \
 singularityware/docker2singularity \
-[<registry>/<namespace>/<repo_name>:<repo_tag>]```
+[<registry>/<namespace>/<repo_name>:<repo_tag>]
+```
 
 4. Upload container to Quest.
 
