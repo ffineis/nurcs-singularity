@@ -20,9 +20,9 @@ Below is an example of how to start up an interactive computing session on a GPU
 ```bash
 $ msub -I -l nodes=1:ppn=1:gpus=1 -l walltime=01:00:00 -q <queue name> -A <your allocation>
 
-$ export SINGULARITY_PULLFOLDER=$TMP_DIR
+$ export SINGULARITY_PULLFOLDER=$TMPDIR
 $ singularity pull --name tf_gpu.simg shub://ffineis/nurcs-singularity:tensorflow_gpu
-$ singularity shell --nv $TMP_DIR/tf_gpu.simg
+$ singularity shell --nv $TMPDIR/tf_gpu.simg
 
 $ python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' # have tensorflow query the gpu's available to it
 ```
